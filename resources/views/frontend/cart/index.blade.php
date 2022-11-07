@@ -8,7 +8,7 @@
 
     <link rel="stylesheet" href="{{ asset('frontend/css/open-iconic-bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/css/animate.css') }}">
-    
+
     <link rel="stylesheet" href="{{ asset('frontend/css/owl.carousel.min.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/css/owl.theme.default.min.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/css/magnific-popup.css') }}">
@@ -20,40 +20,43 @@
     <link rel="stylesheet" href="{{ asset('frontend/css/bootstrap-datepicker.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/css/jquery.timepicker.css') }}">
 
-    
+
     <link rel="stylesheet" href="{{ asset('frontend/css/flaticon.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/css/icomoon.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/css/style.css') }}">
   </head>
   <body class="goto-here">
     <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
-	    <div class="container">
-	      <a class="navbar-brand" href="index.html">TeBe</a>
-	      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
-	        <span class="oi oi-menu"></span> Menu
-	      </button>
+        <div class="container">
+            <a class="navbar-brand" href="index.html">TeBe</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="oi oi-menu"></span> Menu
+            </button>
 
-	      <div class="collapse navbar-collapse" id="ftco-nav">
-	        <ul class="navbar-nav ml-auto">
-	          <li class="nav-item"><a href="{{('http://127.0.0.1:8000')}}" class="nav-link">Home</a></li>
-	          <li class="nav-item dropdown active">
-              <a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Shop</a>
-              <div class="dropdown-menu" aria-labelledby="dropdown04">
-              	<a class="dropdown-item" href="shop.html">Shop</a>
-                <a class="dropdown-item" href="product-single.html">Single Product</a>
-                <a class="dropdown-item" href="cart.html">Cart</a>
-                <a class="dropdown-item" href="checkout.html">Checkout</a>
-              </div>
-            </li>
-	          <li class="nav-item"><a href="about.html" class="nav-link">About</a></li>
-	          <li class="nav-item"><a href="blog.html" class="nav-link">Blog</a></li>
-	          <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
-	          <li class="nav-item cta cta-colored"><a href="cart.html" class="nav-link"><span class="icon-shopping_cart"></span>[0]</a></li>
+            <div class="collapse navbar-collapse" id="ftco-nav">
+              <ul class="navbar-nav ml-auto">
+                <li class="nav-item"><a href="http://127.0.0.1:8000" class="nav-link">Home</a></li>
+                <li class="nav-item dropdown active">
+                <a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Shop</a>
+              </li>
+                <li class="nav-item"><a href="about.html" class="nav-link">About</a></li>
+                <li class="nav-item"><a href="blog.html" class="nav-link">Blog</a></li>
+                <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
+                @php
+                    $total = App\Models\Cart::all()->where('user_ip',auth()->id())->sum(function($a){
+                     return $a->price * $a->quantity;
+                    });
+                    $qty = App\Models\Cart::all()->where('user_ip',auth()->id())->sum('quantity');
 
-	        </ul>
-	      </div>
-	    </div>
-	  </nav>
+
+                @endphp
+                <li class="nav-item cta cta-colored"><a href="/carts" class="nav-link"><span class="icon-shopping_cart"></span>[ {{ $qty }} ]</a></li>
+                <li class="nav-item"><a class="nav-link">${{ $total }}</a></li>
+
+              </ul>
+            </div>
+          </div>
+        </nav>
     <!-- END nav -->
 
     <div class="hero-wrap hero-bread" style="background-image: url(https://images6.alphacoders.com/933/933445.jpg);">
@@ -84,47 +87,31 @@
 						      </tr>
 						    </thead>
 						    <tbody>
-						      <tr class="text-center">
-						        <td class="product-remove"><a href="#"><span class="ion-ios-close"></span></a></td>
-						        
-						        <td class="image-prod"><div class="img" style="background-image:url(https://images6.alphacoders.com/933/933445.jpg);"></div></td>
-						        
-						        <td class="product-name">
-						        	<h3>Young Woman Wearing Dress</h3>
-						        	<p>Far far away, behind the word mountains, far from the countries</p>
-						        </td>
-						        
-						        <td class="price">$4.90</td>
-						        
-						        <td class="quantity">
-						        	<div class="input-group mb-3">
-					             	<input type="text" name="quantity" class="quantity form-control input-number" value="1" min="1" max="100">
-					          	</div>
-					          </td>
-						        
-						        <td class="total">$4.90</td>
-						      </tr><!-- END TR-->
+                                @foreach($carts as $cart)
 
-						      <tr class="text-center">
+
+                                <tr class="text-center">
 						        <td class="product-remove"><a href="#"><span class="ion-ios-close"></span></a></td>
-						        
-						        <td class="image-prod"><div class="img" style="background-image:url(https://images6.alphacoders.com/933/933445.jpg);"></div></td>
-						        
+
+						        <td class="image-prod"><div class="img" src="{{ $cart->gallery->first()->getUrl() }}"></div></td>
+
 						        <td class="product-name">
 						        	<h3>Young Woman Wearing Dress</h3>
 						        	<p>Far far away, behind the word mountains, far from the countries</p>
 						        </td>
-						        
-						        <td class="price">$15.70</td>
-						        
+
+						        <td class="price"> {{ $cart->price }} </td>
+
 						        <td class="quantity">
 						        	<div class="input-group mb-3">
-					             	<input type="text" name="quantity" class="quantity form-control input-number" value="1" min="1" max="100">
-					          	</div>
-					          </td>
-						        
-						        <td class="total">$15.70</td>
-						      </tr><!-- END TR-->
+                                        <input type="text" name="quantity" class="quantity form-control input-number" value="{{ $cart->quantity }}" min="1" max="100">
+                                    </div>
+                                </td>
+
+						        <td class="total">$4.90</td>
+                            </tr><!-- END TR-->
+
+                            @endforeach
 						    </tbody>
 						  </table>
 					  </div>
@@ -231,8 +218,8 @@
         </div>
       </div>
     </footer>
-    
-  
+
+
 
   <!-- loader -->
   <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>
@@ -254,25 +241,25 @@
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
   <script src="{{ asset('frontend/js/google-map.js') }}"></script>
   <script src="{{ asset('frontend/js/main.js') }}"></script>
-    
+
   <script>
 		$(document).ready(function(){
 
 		var quantitiy=0;
 		   $('.quantity-right-plus').click(function(e){
-		        
+
 		        // Stop acting like a button
 		        e.preventDefault();
 		        // Get the field name
 		        var quantity = parseInt($('#quantity').val());
-		        
+
 		        // If is not undefined
-		            
+
 		            $('#quantity').val(quantity + 1);
 
-		          
+
 		            // Increment
-		        
+
 		    });
 
 		     $('.quantity-left-minus').click(function(e){
@@ -280,17 +267,17 @@
 		        e.preventDefault();
 		        // Get the field name
 		        var quantity = parseInt($('#quantity').val());
-		        
+
 		        // If is not undefined
-		      
+
 		            // Increment
 		            if(quantity>0){
 		            $('#quantity').val(quantity - 1);
 		            }
 		    });
-		    
+
 		});
 	</script>
-    
+
   </body>
 </html>

@@ -3,10 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cart;
+use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Traits\ImageUploadingTrait;
 
 class CartController extends Controller
 {
+    use ImageUploadingTrait;
     /**
      * Display a listing of the resource.
      *
@@ -14,20 +18,37 @@ class CartController extends Controller
      */
     public function index(Request $request , $product_name)
     {
-        $cart = Cart::all();
-        $check = Cart::where('product_name', $product_name)->first();
+
+        $check = Cart::where('product_name', $product_name)->where('user_ip', Auth()->id())->first();
         if ($check){
-            Cart::where('product_name', $product_name)->increment('qty');
-            return view('frontend.cart.index')->with('success', 'Category added', compact('cart'));
+            Cart::where('product_name', $product_name)->where('user_ip', Auth()->id()) ->increment('quantity');
+            return Redirect()->back()->with([
+                'message' => 'Add More Cart Success !',
+                'type' => 'warning'
+            ]);
         }else {
 
             Cart::insert([
                 'product_name' => $product_name,
-                'qty' => 1,
+                'quantity' => 1,
                 'price' => $request->price,
+                'user_ip' => Auth()->id(),
             ]);
-            return view('frontend.cart.index')->with('success', 'Category added', compact('cart'));
+            return Redirect()->back()->with([
+                'message' => 'Add Cart Success !',
+                'type' => 'info'
+            ]);
         }
+
+    }
+
+    public function CartPage(Product $product)
+
+
+    {
+      $carts = Cart::where('user_ip', Auth()->id())->latest()->get();
+        return view('frontend.cart.index', compact('carts'));
+
     }
 
     /**
@@ -95,4 +116,16 @@ class CartController extends Controller
     {
         //
     }
+
+    public function product()
+    {
+        return $this->belongsTo(Product::class,'product_name');
+    }
+
+    public function getGalleryAttribute()
+    {
+        return $this->getMedia('gallery');
+    }
+
+
 }

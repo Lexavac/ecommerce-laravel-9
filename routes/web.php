@@ -28,7 +28,7 @@ Route::get('/product/{product:slug?}', [\App\Http\Controllers\PController::class
 
 // Cart
 Route::get('/cart/{product:slug?}', [\App\Http\Controllers\CartController::class, 'index'])->name('cart.index');
-// Route::get('/cart/{product:slug?}', [\App\Http\Controllers\CController::class, 'index'])->name('cart.index');
+Route::get('/cartss', [\App\Http\Controllers\CartController::class, 'CartPage'])->name('cart.CartPage');
 
 
 Route::group(['middleware' => ['auth', 'isAdmin'], 'prefix' => 'admin',  'as' => 'admin.' ], function (){

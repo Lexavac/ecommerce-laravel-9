@@ -54,7 +54,16 @@
 	          <li class="nav-item"><a href="about.html" class="nav-link">About</a></li>
 	          <li class="nav-item"><a href="blog.html" class="nav-link">Blog</a></li>
 	          <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
-	          <li class="nav-item cta cta-colored"><a href="/cart" class="nav-link"><span class="icon-shopping_cart"></span>[0]</a></li>
+              @php
+                  $total = App\Models\Cart::all()->where('user_ip',auth()->id())->sum(function($a){
+                   return $a->price * $a->quantity;
+                  });
+                  $qty = App\Models\Cart::all()->where('user_ip',auth()->id())->sum('quantity');
+
+
+              @endphp
+	          <li class="nav-item cta cta-colored"><a href="/carts" class="nav-link"><span class="icon-shopping_cart"></span>[ {{ $qty }} ]</a></li>
+              <li class="nav-item"><a class="nav-link">${{ $total }}</a></li>
 
 	        </ul>
 	      </div>
@@ -62,7 +71,18 @@
 	  </nav>
     <!-- END nav -->
 
+
+
+
     <div class="hero-wrap hero-bread" style="background-image: url(https://images7.alphacoders.com/691/691161.png);">
+        @if(session()->has('message'))
+        <div class="alert alert-{{ session()->get('type') }} alert-dismissible fade show">
+            {{ session()->get('message') }}
+            <button type="button" class="close" data-dismiss="alert">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    @endif
       <div class="container">
         <div class="row no-gutters slider-text align-items-center justify-content-center">
           <div class="col-md-9 ftco-animate text-center">
