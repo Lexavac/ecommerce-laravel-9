@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cart;
 use Illuminate\Http\Request;
 
 class CartController extends Controller
@@ -11,10 +12,22 @@ class CartController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request , $product_name)
     {
+        $cart = Cart::all();
+        $check = Cart::where('product_name', $product_name)->first();
+        if ($check){
+            Cart::where('product_name', $product_name)->increment('qty');
+            return view('frontend.cart.index')->with('success', 'Category added', compact('cart'));
+        }else {
 
-        return view('frontend.cart.index');
+            Cart::insert([
+                'product_name' => $product_name,
+                'qty' => 1,
+                'price' => $request->price,
+            ]);
+            return view('frontend.cart.index')->with('success', 'Category added', compact('cart'));
+        }
     }
 
     /**

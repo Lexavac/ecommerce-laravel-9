@@ -13,4 +13,13 @@ class HControllerr extends Controller
 
         return view('frontend.homepage', compact('products'));
     }
+
+    public function getProducts(){
+        $products = Product::with('category')->get(['id','name', 'price','slug']);
+
+        return response()->json([
+            'status' => 200,
+            'products' => $products
+        ]);
+    }
 }

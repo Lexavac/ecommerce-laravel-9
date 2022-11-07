@@ -25,7 +25,6 @@ class Tb_customer extends Authenticatable
         'email',
         'phoneNumber',
         'adress',
-        'google_id',
     ];
 
         /**
@@ -48,9 +47,15 @@ class Tb_customer extends Authenticatable
     ];
 
     public function socialAccounts()
-{
-  return $this->hasMany(SocialAccount::class);
-}
+    {
+    return $this->hasMany(SocialAccount::class);
+    }
+
+
+
+
+
+
 }
 
 

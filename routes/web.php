@@ -24,18 +24,19 @@ Route::get('/shop/{slug?}', [\App\Http\Controllers\SController::class, 'index'])
 Route::get('/shop/tag/{slug?}', [\App\Http\Controllers\SController::class, 'tag'])->name('shop.tag');
 
 // Product
-Route::get('/product/{slug?}', [\App\Http\Controllers\PController::class, 'show'])->name('product.show');
+Route::get('/product/{product:slug?}', [\App\Http\Controllers\PController::class, 'show'])->name('product.show');
 
-Route::resource('/cart', \App\Http\Controllers\CartController::class);
+// Cart
+Route::get('/cart/{product:slug?}', [\App\Http\Controllers\CartController::class, 'index'])->name('cart.index');
+// Route::get('/cart/{product:slug?}', [\App\Http\Controllers\CController::class, 'index'])->name('cart.index');
+
 
 Route::group(['middleware' => ['auth', 'isAdmin'], 'prefix' => 'admin',  'as' => 'admin.' ], function (){
 
     Route::get('/', [\App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('dashboard');
-
-
+    Route::get('/products', [\App\Http\Controllers\Admin\HController::class, 'get_products']);
     Route::resource('categories', \App\Http\Controllers\Admin\CategoryController::class);
     Route::resource('categories', \App\Http\Controllers\Admin\Tb_productcateController::class);
-
     Route::post('categories/image', [\App\Http\Controllers\Admin\Tb_productcateController::class, 'storeImage'])->name('categories.storeImage');
 
     // product
@@ -44,7 +45,7 @@ Route::group(['middleware' => ['auth', 'isAdmin'], 'prefix' => 'admin',  'as' =>
 
     // Tag
     Route::resource('tags', \App\Http\Controllers\Admin\TagController::class);
-    
+
 });
 
 
@@ -72,9 +73,8 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 // API Google
 Route::controller(GoogleController::class)->group(function(){
-    // Route::get('auth/google', 'redirectToGoogle')->name('auth.google');
-    // Route::get('auth/google/callback', 'handleGoogleCallback');
     Route::get('/auth/{provider}', [GoogleController::class, 'redirectToProvider']);
     Route::get('/auth/{provider}/callback', [GoogleController::class, 'handleProvideCallback']);
 });
+
 

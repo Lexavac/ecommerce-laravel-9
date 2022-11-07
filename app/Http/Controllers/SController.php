@@ -8,33 +8,7 @@ use Illuminate\Http\Request;
 
 class SController extends Controller
 {
-    public function index()
-    {
-        $products = Product::with('category');
-        // $cartTotal = \Cart::getTotal();
-        // $cartCount = \Cart::getContent()->count();
-
-        $products = $products->paginate(2);
-        return view('frontend.shop.index',compact('products'));
-    }
-
-    public function getProducts(Request $request,$slug = null){
-
-        $sorting = $request->sortingBy;
-
-        switch ($sorting) {
-            case 'popularity':
-                $sortField = 'id';
-                $sortType = 'desc';
-                break;
-            case 'low-high':
-                $sortField = 'price';
-                $sortType = 'asc';
-                break;
-            default:
-                $sortField = 'id';
-                $sortType = 'asc';
-        }
+    public function index(Request $request,$slug = null){
 
         $products = Product::with('category');
 
@@ -64,32 +38,14 @@ class SController extends Controller
             }
         }
 
-        $products = $products->orderBy($sortField, $sortType)->get();
+        $products = $products->paginate(3);
+        return view('frontend.shop.index',compact('products'));
 
-        return response()->json([
-            'message' => 'Success',
-            'products' => $products
-        ]);
 
     }
 
     public function tag(Request $request, $slug)
     {
-        $sorting = $request->sortingBy;
-        switch ($sorting) {
-            case 'popularity':
-                $sortField = 'id';
-                $sortType = 'desc';
-                break;
-            case 'low-high':
-                $sortField = 'price';
-                $sortType = 'asc';
-                break;
-            default:
-                $sortField = 'id';
-                $sortType = 'asc';
-        }
-
         $products = Product::with('tags');
 
         $products = $products->whereHas('tags', function ($query) use($slug) {
@@ -97,7 +53,6 @@ class SController extends Controller
                 'slug' => $slug,
             ]);
         })
-        ->orderBy($sortField, $sortType)
         ->paginate(6);
 
         return view('frontend.shop.index', compact('products','slug'));

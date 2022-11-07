@@ -163,6 +163,8 @@
 
             <div class="actual-form">
               <div class="input-wrap">
+                <form method="POST" action="{{ route('login') }}">
+                    @csrf
                 <input
                 type="email" class="input-field @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus id="email"
                 />
@@ -196,6 +198,7 @@
 
               <button type="submit" value="Login" class="sign-btn" id="butlogin"/>{{ __('Login') }}</button>
 
+              </form>
               <div class="flex items-center justify-end mb-4 align-middle ">
                 <a href="/auth/google">
                     <img src="https://developers.google.com/identity/images/btn_google_signin_dark_normal_web.png" style="margin-left: 3em;">
