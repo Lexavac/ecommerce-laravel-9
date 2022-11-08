@@ -26,8 +26,6 @@
     <link rel="stylesheet" href="{{ asset('frontend/css/icomoon.css') }}">
     <link rel="stylesheet" href="{{ asset('frontend/css/style.css') }}">
 
-    @viteReactRefresh
-    @vite(['resources/js/app.jsx'])
   </head>
   <body class="goto-here">
 

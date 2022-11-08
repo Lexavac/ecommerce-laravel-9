@@ -19,7 +19,7 @@
                             <div class="card-header">
                                 <h4>Create Data Table</h4>
                             </div>
-                            
+
                             <form action="{{ route('admin.categories.store') }}" method="POST" class="card-body">
                                 @csrf
                                 <div class="alert alert-info">
@@ -39,7 +39,7 @@
                                     <label for="photo">photo</label>
                                     <div class="needsclick dropzone" id="photo-dropzone"></div>
                                     </div>
-                            
+
                             <div class="form-group">
                                 <label for="parent">Parent</label>
                                 <select name="category_id" class="form-control">
@@ -49,8 +49,8 @@
                                 @endforeach
                                 </select>
 
-                          
-                                
+
+
                                 <div class="card-footer text-right">
                                     <button class="btn btn-primary mr-1" type="submit">Submit</button>
                                     <button class="btn btn-secondary" type="reset">Reset</button>
@@ -73,7 +73,7 @@
                         Dropzone.options.photoDropzone = {
                                 url: "{{ route('admin.categories.storeImage') }}",
                                 acceptedFiles: '.jpeg,.jpg,.png,.gif',
-                                maxFiles: 1,
+                                maxFiles: 5,
                                 addRemoveLinks: true,
                             headers: {
                                 'X-CSRF-TOKEN': "{{ csrf_token() }}"
@@ -86,7 +86,7 @@
                                 file.previewElement.remove()
                                 if (file.status !== 'error') {
                                     $('form').find('input[name="photo"]').remove()
-                                    this.options.maxFiles = this.options.maxFiles + 1
+                                    this.options.maxFiles = this.options.maxFiles + 5
                                 }
                             },
                             init: function () {
@@ -96,7 +96,7 @@
                                     this.options.thumbnail.call(this, file, "{{ $category->photo->getUrl() }}")
                                     file.previewElement.classList.add('dz-complete')
                                     $('form').append('<input type="hidden" name="photo" value="' + file.file_name + '">')
-                                    this.options.maxFiles = this.options.maxFiles - 1
+                                    this.options.maxFiles = this.options.maxFiles - 5
                                 @endif
                             },
                             error: function (file, response) {

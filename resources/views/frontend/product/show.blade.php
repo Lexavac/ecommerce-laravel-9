@@ -164,6 +164,9 @@
             <form action="{{ route('cart.index', $product->slug) }}" method="GET">
                 @csrf
                 <input type="hidden" name="price" id="" value="{{ $product->price }}">
+                <input type="hidden" name="name" id="" value="{{ $product->name }}">
+                <input type="hidden" name="image" id="" value="{{ $product->gallery->first()->getUrl() }}">
+
                 <button type="submit" class="btn btn-black py-3 px-5"><a class="btn btn-black py-3 px-5"> Add to Cart </a></button>
             </form>
     			</div>

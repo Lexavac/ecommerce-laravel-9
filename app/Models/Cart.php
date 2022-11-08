@@ -14,7 +14,6 @@ class Cart extends Model implements HasMedia
 {
     use HasFactory,Sluggable,InteractsWithMedia;
 
-    protected $append = ['gallery'];
 
     protected $fillable = [
         'product_name',
@@ -23,6 +22,8 @@ class Cart extends Model implements HasMedia
         'user_ip',
 
     ];
+
+    protected $append = ['gallery'];
 
      /**
      * Return the sluggable configuration array for this model.
@@ -46,12 +47,12 @@ class Cart extends Model implements HasMedia
 
     public function category()
     {
-        return $this->belongsTo(Tb_productcate::class);
+        return $this->belongsTo(Product::class);
     }
 
-    public function getGalleryAttribute()
+    public function getGalleryAttribute(Product $product)
     {
-        return $this->getMedia('gallery');
+        return $product->getMedia('gallery');
     }
 
     public function tags()

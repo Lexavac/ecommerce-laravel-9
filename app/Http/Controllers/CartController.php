@@ -29,10 +29,11 @@ class CartController extends Controller
         }else {
 
             Cart::insert([
-                'product_name' => $product_name,
+                'product_name' => $request->name,
                 'quantity' => 1,
                 'price' => $request->price,
                 'user_ip' => Auth()->id(),
+                'image' => $request->image,
             ]);
             return Redirect()->back()->with([
                 'message' => 'Add Cart Success !',
@@ -47,7 +48,7 @@ class CartController extends Controller
 
     {
       $carts = Cart::where('user_ip', Auth()->id())->latest()->get();
-        return view('frontend.cart.index', compact('carts'));
+        return view('frontend.cart.index', compact('carts', 'product'));
 
     }
 

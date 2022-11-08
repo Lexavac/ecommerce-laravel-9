@@ -28,7 +28,7 @@ Route::get('/product/{product:slug?}', [\App\Http\Controllers\PController::class
 
 // Cart
 Route::get('/cart/{product:slug?}', [\App\Http\Controllers\CartController::class, 'index'])->name('cart.index');
-Route::get('/cartss', [\App\Http\Controllers\CartController::class, 'CartPage'])->name('cart.CartPage');
+Route::get('/carts', [\App\Http\Controllers\CartController::class, 'CartPage'])->name('cart.CartPage');
 
 
 Route::group(['middleware' => ['auth', 'isAdmin'], 'prefix' => 'admin',  'as' => 'admin.' ], function (){
@@ -50,6 +50,8 @@ Route::group(['middleware' => ['auth', 'isAdmin'], 'prefix' => 'admin',  'as' =>
 
 
 Route::get('/check', [\App\Http\Controllers\CEController::class, 'check'])->name('check.show');
+Route::post('place/order', [\App\Http\Controllers\OrderController::class, 'storeOrder'])->name('place-order');
+// Route::post('place/order', [\App\Http\Controllers\OrderController::class, 'index'])->name('index');
 
 Route::get('/about', [\App\Http\Controllers\AboutController::class, 'index'])->name('about.show');
 Route::get('/about/detail', [\App\Http\Controllers\AboutController::class, 'detail'])->name('detail');
@@ -68,7 +70,8 @@ Route::get('admin/studentcreate', [\App\Http\Controllers\Admin\ControllerClassr:
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('homepage');
+Route::get('/homes', [App\Http\Controllers\HomeController::class, 'index'])->name('homepage');
+Route::get('/home', [App\Http\Controllers\ProfileController::class, 'index'])->name('index');
 
 
 // API Google

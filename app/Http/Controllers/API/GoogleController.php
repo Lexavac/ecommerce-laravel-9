@@ -40,7 +40,7 @@ class GoogleController extends Controller
         Auth()->login($authUser, true);
 
 
-        return redirect()->intended('home');
+        return redirect()->intended('/');
     }
 
     public function findOrCreateUser($socialUser, $provider)

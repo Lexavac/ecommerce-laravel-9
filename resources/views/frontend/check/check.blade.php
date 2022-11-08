@@ -4,7 +4,7 @@
     <title>Winkel - Free Bootstrap 4 Template by Colorlib</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    
+
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet">
 
     <link rel="stylesheet" href="{{ asset('frontend/css/open-iconic-bootstrap.min.css') }}">
@@ -36,20 +36,29 @@
 
 	      <div class="collapse navbar-collapse" id="ftco-nav">
 	        <ul class="navbar-nav ml-auto">
-	          <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
+	          <li class="nav-item"><a href="http://127.0.0.1:8000" class="nav-link">Home</a></li>
 	          <li class="nav-item dropdown active">
               <a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Shop</a>
-              <div class="dropdown-menu" aria-labelledby="dropdown04">
-              	<a class="dropdown-item" href="shop.html">Shop</a>
-                <a class="dropdown-item" href="product-single.html">Single Product</a>
-                <a class="dropdown-item" href="cart.html">Cart</a>
-                <a class="dropdown-item" href="checkout.html">Checkout</a>
-              </div>
             </li>
 	          <li class="nav-item"><a href="about.html" class="nav-link">About</a></li>
 	          <li class="nav-item"><a href="blog.html" class="nav-link">Blog</a></li>
 	          <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
-	          <li class="nav-item cta cta-colored"><a href="cart.html" class="nav-link"><span class="icon-shopping_cart"></span>[0]</a></li>
+              @php
+                  $total = App\Models\Cart::all()->where('user_ip',auth()->id())->sum(function($a){
+                   return $a->price * $a->quantity;
+                  });
+                  $qty = App\Models\Cart::all()->where('user_ip',auth()->id())->sum('quantity');
+
+                  $checks = App\Models\Cart::where('user_ip', Auth()->id())->latest()->get();
+                  $subtotal = App\Models\Cart::all()->where('user_ip',auth()->id())->sum(function($t){
+
+                  });
+
+
+
+              @endphp
+	          <li class="nav-item cta cta-colored"><a href="/carts" class="nav-link"><span class="icon-shopping_cart"></span>[ {{ $qty }} ]</a></li>
+              <li class="nav-item"><a class="nav-link">${{ $total }}</a></li>
 
 	        </ul>
 	      </div>
@@ -72,28 +81,29 @@
       <div class="container">
         <div class="row justify-content-center">
           <div class="col-xl-8 ftco-animate">
-						<form action="#" class="billing-form">
+						<form action="{{ route('place-order') }}" method="POST" class="billing-form">
+                            @csrf
 							<h3 class="mb-4 billing-heading">Billing Details</h3>
 	          	<div class="row align-items-end">
 	          		<div class="col-md-6">
 	                <div class="form-group">
 	                	<label for="firstname">Firt Name</label>
-	                  <input type="text" class="form-control" placeholder="">
+	                  <input type="text" class="form-control" placeholder="" name="shipping_fisrt_name" value="{{ auth()->user()->firstname }}">
 	                </div>
 	              </div>
 	              <div class="col-md-6">
 	                <div class="form-group">
 	                	<label for="lastname">Last Name</label>
-	                  <input type="text" class="form-control" placeholder="">
+	                  <input type="text" class="form-control" placeholder="" name="shipping_last_name" value="{{ auth()->user()->lastname }}">
 	                </div>
                 </div>
-                <div class="w-100"></div>
+                {{-- <div class="w-100"></div>
 		            <div class="col-md-12">
 		            	<div class="form-group">
 		            		<label for="country">State / Country</label>
 		            		<div class="select-wrap">
 		                  <div class="icon"><span class="ion-ios-arrow-down"></span></div>
-		                  <select name="" id="" class="form-control">
+		                  <select name="state" id="" class="form-control">
 		                  	<option value="">France</option>
 		                    <option value="">Italy</option>
 		                    <option value="">Philippines</option>
@@ -103,12 +113,12 @@
 		                  </select>
 		                </div>
 		            	</div>
-		            </div>
+		            </div> --}}
 		            <div class="w-100"></div>
 		            <div class="col-md-6">
 		            	<div class="form-group">
 	                	<label for="streetaddress">Street Address</label>
-	                  <input type="text" class="form-control" placeholder="House number and street name">
+	                  <input type="text" class="form-control" placeholder="House number and street name" name="adress" value="{{ auth()->user()->adress }}">
 	                </div>
 		            </div>
 		            <div class="col-md-6">
@@ -120,26 +130,26 @@
 		            <div class="col-md-6">
 		            	<div class="form-group">
 	                	<label for="towncity">Town / City</label>
-	                  <input type="text" class="form-control" placeholder="">
+	                  <input type="text" class="form-control" placeholder="" name="state">
 	                </div>
 		            </div>
 		            <div class="col-md-6">
 		            	<div class="form-group">
-		            		<label for="postcodezip">Postcode / ZIP *</label>
-	                  <input type="text" class="form-control" placeholder="">
+		            		<label for="postcode">Postcode / ZIP *</label>
+	                  <input type="text" class="form-control" placeholder="" name="post_code">
 	                </div>
 		            </div>
 		            <div class="w-100"></div>
 		            <div class="col-md-6">
 	                <div class="form-group">
 	                	<label for="phone">Phone</label>
-	                  <input type="text" class="form-control" placeholder="">
+	                  <input type="text" class="form-control" placeholder="" name="shipping_phone" value="{{ auth()->user()->phoneNumber }}">
 	                </div>
 	              </div>
 	              <div class="col-md-6">
 	                <div class="form-group">
-	                	<label for="emailaddress">Email Address</label>
-	                  <input type="text" class="form-control" placeholder="">
+	                	<label for="email">Email Address</label>
+	                  <input type="text" class="form-control" placeholder="" name="shipping_email" value="{{ auth()->user()->email }}">
 	                </div>
                 </div>
                 <div class="w-100"></div>
@@ -152,30 +162,33 @@
 									</div>
                 </div>
 	            </div>
-	          </form><!-- END -->
+	      <!-- END -->
 
 
 
 	          <div class="row mt-5 pt-3 d-flex">
 	          	<div class="col-md-6 d-flex">
-	          		<div class="cart-detail cart-total bg-light p-3 p-md-4">
-	          			<h3 class="billing-heading mb-4">Cart Total</h3>
+                      <div class="cart-detail cart-total bg-light p-3 p-md-4">
+                          <h3 class="billing-heading mb-4">Sub Total</h3>
 	          			<p class="d-flex">
-		    						<span>Subtotal</span>
-		    						<span>$20.60</span>
-		    					</p>
-		    					<p class="d-flex">
+                              @foreach($checks as $check)
+                              <span>{{ $check->product_name }}</span>
+                              <span>${{ $check->price }}</span>
+                              <span>{{ $check->quantity }}</span>
+                            </p>
+                            @endforeach
+		    					{{-- <p class="d-flex">
 		    						<span>Delivery</span>
 		    						<span>$0.00</span>
 		    					</p>
 		    					<p class="d-flex">
 		    						<span>Discount</span>
-		    						<span>$3.00</span>
-		    					</p>
+		    						<span>$0</span>
+		    					</p> --}}
 		    					<hr>
 		    					<p class="d-flex total-price">
 		    						<span>Total</span>
-		    						<span>$17.60</span>
+		    						<span>${{ $total }}</span>
 		    					</p>
 								</div>
 	          	</div>
@@ -199,7 +212,7 @@
 									<div class="form-group">
 										<div class="col-md-12">
 											<div class="radio">
-											   <label><input type="radio" name="optradio" class="mr-2"> Paypal</label>
+											   <label for="paypal"><input type="radio" id="paypal" class="mr-2" value="paypal" name="payment_type"> Paypal</label>
 											</div>
 										</div>
 									</div>
@@ -210,7 +223,8 @@
 											</div>
 										</div>
 									</div>
-									<p><a href="#"class="btn btn-primary py-3 px-4">Place an order</a></p>
+									<p><button type="submit" class="btn btn-primary py-3 px-4">Place an order</button></p>
+                                </form>
 								</div>
 	          	</div>
 	          </div>
@@ -292,8 +306,8 @@
         </div>
       </div>
     </footer>
-    
-  
+
+
 
   <!-- loader -->
   <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>
@@ -315,6 +329,6 @@
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
   <script src="{{ asset('frontend/js/google-map.js') }}"></script>
   <script src="{{ asset('frontend/js/main.js') }}"></script>
-    
+
   </body>
 </html>

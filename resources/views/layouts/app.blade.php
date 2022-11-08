@@ -12,69 +12,95 @@
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet">
+
+    <link rel="stylesheet" href="{{ asset('frontend/css/open-iconic-bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('frontend/css/animate.css') }}">
+
+    <link rel="stylesheet" href="{{ asset('frontend/css/owl.carousel.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('frontend/css/owl.theme.default.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('frontend/css/magnific-popup.css') }}">
+
+    <link rel="stylesheet" href="{{ asset('frontend/css/aos.css') }}">
+
+    <link rel="stylesheet" href="{{ asset('frontend/css/ionicons.min.css') }}">
+
+    <link rel="stylesheet" href="{{ asset('frontend/css/bootstrap-datepicker.css') }}">
+    <link rel="stylesheet" href="{{ asset('frontend/css/jquery.timepicker.css') }}">
+
+
+    <link rel="stylesheet" href="{{ asset('frontend/css/flaticon.css') }}">
+    <link rel="stylesheet" href="{{ asset('frontend/css/icomoon.css') }}">
+    <link rel="stylesheet" href="{{ asset('frontend/css/style.css') }}">
+
 
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js', 'resources/css/app.css'])
 </head>
-<body>
-    <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
-            <div class="container">
-                <a class="navbar-brand" href="{{ url('/') }}">
-                    {{ config('app.name', 'Laravel') }}
-                </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
+<body class="goto-here">
 
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <!-- Left Side Of Navbar -->
-                    <ul class="navbar-nav me-auto">
+    <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
+	    <div class="container">
+	      <a class="navbar-brand" href="index.html">TeBe</a>
+	      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
+	        <span class="oi oi-menu"></span> Menu
+	      </button>
 
-                    </ul>
+	      <div class="collapse navbar-collapse" id="ftco-nav">
+	        <ul class="navbar-nav ml-auto">
+	          <li class="nav-item active"><a href="index.html" class="nav-link">Home</a></li>
+	          <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Shop</a>
+              <div class="dropdown-menu" aria-labelledby="dropdown04">
 
-                    <!-- Right Side Of Navbar -->
-                    <ul class="navbar-nav ms-auto">
-                        <!-- Authentication Links -->
-                        @guest
-                            @if (Route::has('login'))
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-                                </li>
-                            @endif
+                @foreach($menu_categories as $menu_category)
+                <a class="dropdown-item" href="{{ route('shop.index', $menu_category->slug) }}">{{ $menu_category->name }}</a>
+                @endforeach
+              </div>
+            </li>
+	          <li class="nav-item"><a href="about.html" class="nav-link">About</a></li>
+	          <li class="nav-item"><a href="blog.html" class="nav-link">Blog</a></li>
+	          <li class="nav-item"><a href="contact.html" class="nav-link">Contact</a></li>
+	          <li class="nav-item"><a href="cart.html" class="nav-link"></a</li>
 
-                            @if (Route::has('register'))
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-                                </li>
-                            @endif
-                        @else
-                            <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    {{ Auth::user()->name }}
-                                </a>
+				@guest
+					<li class="nav-item"><a href="{{ route('login') }}" class="nav-link">Login</a></li>
+					<li class="nav-item"><a href="{{ route('register') }}" class="nav-link">Register</a></li>
+				@else
+					<li class="nav-item"><a href="/admin" class="nav-link">{{ auth()->user()->username }}</a></li>
+					<li class="nav-item"><a href="#" class="nav-link" onclick="event.preventDefault();document.querySelector('#logout-form').submit()">Logout</a></li>
+					<form action="{{ route('logout') }}" id="logout-form" method="POST">
+				@csrf
+					</form>
+				@endguest
 
-                                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{{ route('logout') }}"
-                                       onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                        {{ __('Logout') }}
-                                    </a>
 
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                        @csrf
-                                    </form>
-                                </div>
-                            </li>
-                        @endguest
-                    </ul>
-                </div>
-            </div>
-        </nav>
+	        </ul>
+	      </div>
+	    </div>
+	  </nav>
 
         <main class="py-4">
             @yield('content')
         </main>
     </div>
+
+
+  <script src="{{ asset('frontend/js/jquery.min.js') }}"></script>
+  <script src="{{ asset('frontend/js/jquery-migrate-3.0.1.min.js') }}"></script>
+  <script src="{{ asset('frontend/js/popper.min.js') }}"></script>
+  <script src="{{ asset('frontend/js/bootstrap.min.js') }}"></script>
+  <script src="{{ asset('frontend/js/jquery.easing.1.3.js') }}"></script>
+  <script src="{{ asset('frontend/js/jquery.waypoints.min.js') }}"></script>
+  <script src="{{ asset('frontend/js/jquery.stellar.min.js') }}"></script>
+  <script src="{{ asset('frontend/js/owl.carousel.min.js') }}"></script>
+  <script src="{{ asset('frontend/js/jquery.magnific-popup.min.js') }}"></script>
+  <script src="{{ asset('frontend/js/aos.js') }}"></script>
+  <script src="{{ asset('frontend/js/jquery.animateNumber.min.js') }}"></script>
+  <script src="{{ asset('frontend/js/bootstrap-datepicker.js') }}"></script>
+  <script src="{{ asset('frontend/js/scrollax.min.js') }}"></script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
+  <script src="{{ asset('frontend/js/google-map.js') }}"></script>
+  <script src="{{ asset('frontend/js/main.js') }}"></script>
 </body>
 </html>

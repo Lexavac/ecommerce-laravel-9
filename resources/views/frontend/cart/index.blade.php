@@ -46,6 +46,7 @@
                     $total = App\Models\Cart::all()->where('user_ip',auth()->id())->sum(function($a){
                      return $a->price * $a->quantity;
                     });
+                    $checks = App\Models\Cart::where('user_ip', Auth()->id())->latest()->get();
                     $qty = App\Models\Cart::all()->where('user_ip',auth()->id())->sum('quantity');
 
 
@@ -88,15 +89,13 @@
 						    </thead>
 						    <tbody>
                                 @foreach($carts as $cart)
-
-
                                 <tr class="text-center">
 						        <td class="product-remove"><a href="#"><span class="ion-ios-close"></span></a></td>
 
-						        <td class="image-prod"><div class="img" src="{{ $cart->gallery->first()->getUrl() }}"></div></td>
+						        <td class="image-prod"><div class="img" style="background-image: url( {{ $cart->image }} );"></div></td>
 
 						        <td class="product-name">
-						        	<h3>Young Woman Wearing Dress</h3>
+						        	<h3>{{ $cart->product_name }}</h3>
 						        	<p>Far far away, behind the word mountains, far from the countries</p>
 						        </td>
 
@@ -108,7 +107,7 @@
                                     </div>
                                 </td>
 
-						        <td class="total">$4.90</td>
+						        <td class="total">{{ $total }}</td>
                             </tr><!-- END TR-->
 
                             @endforeach
@@ -120,23 +119,26 @@
     		<div class="row justify-content-center">
     			<div class="col col-lg-5 col-md-6 mt-5 cart-wrap ftco-animate">
     				<div class="cart-total mb-3">
-    					<h3>Cart Totals</h3>
-    					<p class="d-flex">
-    						<span>Subtotal</span>
-    						<span>$20.60</span>
-    					</p>
-    					<p class="d-flex">
+    					<h3>Sub Totals</h3>
+                        <span>Subtotal</span>
+                        @foreach($checks as $check)
+                        <span>{{ $check->product_name }}</span>
+                        <span>${{ $check->price }}</span>
+                        <span>{{ $check->quantity }}</span>
+                      </p>
+                      @endforeach
+    					{{-- <p class="d-flex">
     						<span>Delivery</span>
     						<span>$0.00</span>
     					</p>
     					<p class="d-flex">
     						<span>Discount</span>
     						<span>$3.00</span>
-    					</p>
+    					</p> --}}
     					<hr>
     					<p class="d-flex total-price">
     						<span>Total</span>
-    						<span>$17.60</span>
+    						<span>${{ $total }}</span>
     					</p>
     				</div>
     				<p class="text-center"><a href="checkout.html" class="btn btn-primary py-3 px-4">Proceed to Checkout</a></p>
