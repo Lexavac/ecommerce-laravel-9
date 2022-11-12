@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\API\GoogleController;
+use App\Http\Controllers\FavoriteController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -26,12 +27,8 @@ Route::get('/shop/tag/{slug?}', [\App\Http\Controllers\SController::class, 'tag'
 // Product
 Route::get('/product/{product:slug?}', [\App\Http\Controllers\PController::class, 'show'])->name('product.show');
 
-// Cart
-Route::get('/cart/{product:slug?}', [\App\Http\Controllers\CartController::class, 'index'])->name('cart.index');
-Route::get('/carts', [\App\Http\Controllers\CartController::class, 'CartPage'])->name('cart.CartPage');
 
-
-Route::group(['middleware' => ['auth', 'isAdmin'], 'prefix' => 'admin',  'as' => 'admin.' ], function (){
+Route::group(['middleware' => ['auth', 'CheckLevel:admin'], 'prefix' => 'admin',  'as' => 'admin.' ], function (){
 
     Route::get('/', [\App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('dashboard');
     Route::get('/products', [\App\Http\Controllers\Admin\HController::class, 'get_products']);
@@ -71,7 +68,27 @@ Route::get('admin/studentcreate', [\App\Http\Controllers\Admin\ControllerClassr:
 Auth::routes();
 
 Route::get('/homes', [App\Http\Controllers\HomeController::class, 'index'])->name('homepage');
-Route::get('/home', [App\Http\Controllers\ProfileController::class, 'index'])->name('index');
+
+Route::group(['middleware' => 'auth'], function(){ 
+    // Cart
+    Route::get('/cart/{product:slug?}', [\App\Http\Controllers\CartController::class, 'index'])->name('cart.index');
+    Route::get('/carts', [\App\Http\Controllers\CartController::class, 'CartPage'])->name('cart.CartPage');
+
+    Route::get('/profile', [App\Http\Controllers\ProfileController::class, 'index'])->name('index');
+});
+
+Route::group(['middleware' => ['auth','CheckLevel:seller'], 'prefix' => 'seller',  'as' => 'seller.'], function(){ 
+    // Cart
+    Route::get('/', function(){
+        return "page Seller";
+    });
+});
+
+
+//favorite
+
+Route::get('/favorites', [FavoriteController::class, 'showFavorite']);
+Route::get('/favorite/add/{product:name?}', [App\Http\Controllers\FavoriteController::class, 'index'])->name('favorite.add');
 
 
 // API Google

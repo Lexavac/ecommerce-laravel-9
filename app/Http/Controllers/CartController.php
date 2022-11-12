@@ -47,9 +47,8 @@ class CartController extends Controller
 
 
     {
-      $carts = Cart::where('user_ip', Auth()->id())->latest()->get();
+        $carts = Cart::where('user_ip', Auth()->id())->latest()->get();
         return view('frontend.cart.index', compact('carts', 'product'));
-
     }
 
     /**
