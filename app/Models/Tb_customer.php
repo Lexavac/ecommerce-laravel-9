@@ -28,6 +28,7 @@ class Tb_customer extends Authenticatable
         'email',
         'phoneNumber',
         'adress',
+        'levels',
     ];
 
         /**

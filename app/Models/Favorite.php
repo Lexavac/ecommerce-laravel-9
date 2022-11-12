@@ -2,29 +2,28 @@
 
 namespace App\Models;
 
-
+use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Cviebrock\EloquentSluggable\Sluggable;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
-class Cart extends Model implements HasMedia
-
+class Favorite extends Model implements HasMedia
 {
     use HasFactory,Sluggable,InteractsWithMedia;
 
+    protected $table = 'favorite';
 
     protected $fillable = [
         'product_name',
-        'quantity',
         'price',
-        'user_ip',
+        'img_link',
+        'user_id'
     ];
 
     protected $append = ['gallery'];
 
-     /**
+    /**
      * Return the sluggable configuration array for this model.
      *
      * @return array
@@ -33,7 +32,7 @@ class Cart extends Model implements HasMedia
     {
         return [
             'slug' => [
-                'source' => 'name',
+                'source' => 'product_name',
                 'onUpdate' => true,
             ]
         ];
